@@ -1,0 +1,150 @@
+<!--
+CandyCrush
+Your Name: Edward Hughes
+Collaborators: nobody
+-->
+<!DOCTYPE html>
+<html>
+<!--
+/* Copyright (c) 2017 MIT 6.813/6.831 course staff, all rights reserved.
+ * Redistribution of original or derived work requires permission of course staff.
+ */
+-->
+
+	<head>
+		<meta charset="utf-8">
+		<title>Candy Crush</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+		<!-- Load style sheets -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.css">
+		
+		<link rel="stylesheet" href="mainLayout.css">
+		
+		<!-- Use mobile-aware viewport -->
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		
+		<!-- Load any supplemental Javascript libraries here -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.2/seedrandom.js"></script>
+		<script src="candy.js"></script>
+		<script src="board.js"></script>
+		<script src="rules.js"></script>
+		<script src="handler.js"></script>
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="button js-button-campaign"><span>Начать</span></div>
+			<div class="overlay js-overlay-campaign">
+				<div class="row js-popup-campaign">
+					<div class="col-md-12" id="firstColumn">
+						<div class="up">
+								<header>
+									<p>Набери 4000 очков за 60 секунд</p>
+									<span class="js-close-campaign"><i class="fa fa-times-circle" aria-hidden="true"></i></span>
+								</header>
+								<div class="game-info">
+									<div class="left">
+									  <div class="img_with_text">
+										  <div class="img_rollton">
+												<img src="graphics/rollton.png" alt="">
+										  </div>
+										  <div class="text_rollton">
+												<span>&#x2716</span>
+												<span id="text_rollton_id" style="font-weight: 700">2</span>
+										  </div>
+
+									  </div>
+										<div class="point">
+											<label id="scoreLabel">0</label>
+											<span>/4000</span>
+										</div>
+
+									</div>
+									<div class="right">
+										  <span id="timer">
+											<span id="time">60</span>
+										  </span>
+									</div>
+								  </div>
+						</div>
+
+					</div>
+
+					<div class="col-md-12" id="mainColumn">
+
+
+						<div class="game">
+								<div class="canvasOverlay">
+										<p>Играть &#8595;</p>
+								</div>
+								<div id="gameBoard"></div>
+								<canvas id="canvas" width="320" height="320">
+										<p>Canvas not supported on your browser.</p>
+								</canvas>
+						</div>
+					</div>
+					<div class="col-md-12" id="lastColumn">
+							<!-- <input onclick="reloadPage()" class="btn btn-default" type="button" id="newGame" value="Играть"><br/> -->
+							<button onclick="timeReload()" class="btn btn-default" id="newGame">
+								<div class="btnOverlay">
+									<h4>Играть</h4><p>(</p><span>2</span><p>попыток</p><p>)</p>
+								</div>
+							</button>
+					</div>
+				</div> <!-- class="row" -->
+			</div>
+		</div> <!-- class="container" -->
+		<script src="popup.js"></script>
+		<script>
+			function timeReload() {
+				var timeTwoNumbers = document.getElementById("time");
+				if (timeTwoNumbers.innerText == 0 || timeTwoNumbers.innerText == 60) {
+					console.log("ishle")
+					console.log(timeTwoNumbers.innerText)
+					document.querySelector(".canvasOverlay").style.display = "none";
+
+					var counter = 5;
+
+					var interval = setInterval(function() {
+						counter--;
+						if (counter < 0) {
+							if (counter == -1) {
+								document.querySelector(".canvasOverlay").style.display = "flex";
+								var time = document.querySelector("#newGame span");
+								time.innerText = time.innerText - 1;
+								var text_rollton_id = document.getElementById("text_rollton_id");
+								if(text_rollton_id.innerText>0 && text_rollton_id.innerText!=-1 ){
+									text_rollton_id.innerText = text_rollton_id.innerText - 1;
+								}
+								if (time.innerText == 1) {
+									$('#newGame').click(function(){
+										$(this).attr("disabled","disabled");
+									});
+								}
+								if (time.innerText == 0) {
+									var btn = document.getElementById("newGame");
+									btn.style.background = "#817F7F";
+									var score = $(".point label").text();
+									$('.canvasOverlay ').css('opacity', '1');
+									$('.canvasOverlay p').html("Игра окончена!"+ "<br>" + "Вы набрали:"+ score)
+								}
+							}
+							clearInterval(interval);
+							$('#timer').html("<span id='time'>0</span>");
+							return;
+						}else{
+							$('#time').text(counter);
+						}
+					}, 1000);
+				}else{
+					console.log("ishleme")
+				}
+			}
+
+		</script>
+
+	</body>
+
+</html>
